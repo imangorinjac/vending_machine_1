@@ -1,0 +1,5 @@
+__pycache__/user.cpython-39.pyc
+.vs
+api-server-flask
+venv
+registration.db
