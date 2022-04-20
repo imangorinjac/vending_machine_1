@@ -1,6 +1,18 @@
 from model import *
 
 
+@app.route("/user", methods=["POST"])  # create user
+def add_user():
+
+    username = request.json["username"]
+    password = request.json["password"]
+    role = request.json["role"]
+    new_user = User(username, password, role)
+    db.session.add(new_user)
+    db.session.commit()
+    return user_schema.jsonify(new_user)
+
+
 @app.route("/user", methods=["GET"])  # get the user
 @token_required
 def get_all_users(current_user):

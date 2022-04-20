@@ -3,13 +3,13 @@ from model import *
 
 @app.route("/product", methods=["POST"])  # create a product
 def add_product():
-
-    amountAvailable = request.json["amountAvailable"]
-    cost = request.json["cost"]
-    productName = request.json["productName"]
-    new_product = Product(amountAvailable, cost, productName)
-    db.session.add(new_product)
-    db.session.commit()
+    if User.role == "buyer":
+        amountAvailable = request.json["amountAvailable"]
+        cost = request.json["cost"]
+        productName = request.json["productName"]
+        new_product = Product(amountAvailable, cost, productName)
+        db.session.add(new_product)
+        db.session.commit()
     return product_schema.jsonify(new_product)
 
 
@@ -28,7 +28,7 @@ def get_products():
 
 @app.route("/product/<id>", methods=["PUT"])  # update the product
 def update_product(id):
-    if User.role == "buyer":
+    if User.role == "seller":
         product = Product.query.get(id)
         amountAvailable = request.json["amountAvailable"]
         cost = request.json["cost"]
@@ -42,7 +42,7 @@ def update_product(id):
 
 @app.route("/product/<id>", methods=["DELETE"])  # delete a certain product
 def delete_products(id):
-    if User.role == "buyer":
+    if User.role == "seller":
         product = Product.query.get(id)
         db.session.delete(product)
         db.session.commit()
