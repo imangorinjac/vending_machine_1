@@ -1,5 +1,7 @@
 from model import *
 
+app = Flask(__name__)
+
 
 @app.route("/user", methods=["POST"])  # create user
 def add_user():
@@ -20,7 +22,12 @@ def get_all_users(current_user):
     output = []
     for user in users:
         output.append(
-            {"username": user.username, "password": user.password, "role": user.role}
+            {
+                "public_id": user.public_id,
+                "username": user.username,
+                "password": user.password,
+                "role": user.role,
+            }
         )
 
     return jsonify({"users": output})
@@ -47,3 +54,7 @@ def update_user(id):
     user.role = role
     db.session.commit()
     return user_schema.jsonify(user)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

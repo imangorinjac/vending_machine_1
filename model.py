@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request, make_response
-from sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 import os
+import uuid
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -25,11 +26,12 @@ ma = Marshmallow(app)
 class User(db.Model):
     __table_args__ = {"extend_existing": True}
     id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, username, password, role):
+    def __init__(self, username, password, role, **kwargs):
         self.username = username
         self.password = password
         self.role = role
@@ -46,12 +48,13 @@ users_schema = UserSchema(many=True, strict=True)
 
 class Product(db.Model):
     __table_args__ = {"extend_existing": True}
-    sellerid = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String(50), unique=True)
     amountAvailable = db.Column(db.String(80), unique=True, nullable=False)
     cost = db.Column(db.String(120), nullable=False)
     productName = db.Column(db.String(120), nullable=False)
 
-    def __init__(self, amountAvaiable, cost, productName):
+    def __init__(self, amountAvaiable, cost, productName, **kwargs):
         self.amountAvaiable = amountAvaiable
         self.cost = cost
         self.productName = productName

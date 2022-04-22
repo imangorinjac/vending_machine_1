@@ -1,9 +1,11 @@
 from model import *
 
+app = Flask(__name__)
+
 
 @app.route("/product", methods=["POST"])  # create a product
 def add_product():
-    if User.role == "buyer":
+    if User.role == "seller":
         amountAvailable = request.json["amountAvailable"]
         cost = request.json["cost"]
         productName = request.json["productName"]
@@ -47,3 +49,7 @@ def delete_products(id):
         db.session.delete(product)
         db.session.commit()
     return product_schema.jsoinfy(product)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

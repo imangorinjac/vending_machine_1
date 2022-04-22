@@ -1,5 +1,7 @@
 from model import *
 
+app = Flask(__name__)
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -47,7 +49,10 @@ def register():
         user = User.query.filter_by(username=username, password=password).first()
     if not user:
         user = User(
-            username=username, password=generate_password_hash(password), role=role
+            public_id=str(uuid.uuid4()),
+            username=username,
+            password=generate_password_hash(password),
+            role=role,
         )
         db.session.add(user)
         db.session.commit()
@@ -55,3 +60,7 @@ def register():
         return make_response("Successfully registered.", 201)
     else:
         return make_response("User already exists. Please Log in.", 202)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
