@@ -42,8 +42,8 @@ class UserSchema(ma.Schema):
         fields = ("id", "username", "password", "role")
 
 
-user_schema = UserSchema(strict=True)
-users_schema = UserSchema(many=True, strict=True)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 
 class Product(db.Model):
@@ -65,8 +65,8 @@ class ProductSchema(ma.Schema):
         fields = ("sellerid", "amountAvailable", "cost", "productName")
 
 
-product_schema = ProductSchema(strict=True)
-products_schema = ProductSchema(many=True, strict=True)
+product_schema = ProductSchema()
+products_schema = ProductSchema(many=True)
 
 db.create_all()
 
