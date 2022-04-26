@@ -39,7 +39,7 @@ def delete_user(id):
     user = User.query.get(id)
     db.session.delete(user)
     db.session.commit()
-    return user_schema.jsoinfy(user)
+    return user_schema.jsonify(user)
 
 
 @app.route("/user/<id>", methods=["PUT"])  # update the user
